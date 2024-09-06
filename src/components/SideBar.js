@@ -1,8 +1,18 @@
-import React from "react";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
 
-export function SideBar({ onTrackSelect }) {
+export function SideBar({ onTrackSelect, onSearch }) {
   const favorites = useSelector((state) => state.favorites.content);
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const handleSearchInputChange = (e) => {
+    setSearchQuery(e.target.value);
+  };
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    onSearch(searchQuery); // Invia la query di ricerca alla HomePage
+  };
 
   return (
     <aside className="col col-2">
@@ -36,12 +46,21 @@ export function SideBar({ onTrackSelect }) {
                   </a>
                 </li>
                 <li>
-                  <div className="input-group mt-3">
-                    <input type="text" className="form-control" placeholder="Search" aria-label="Search" />
+                  <form className="input-group mt-3" onSubmit={handleSearchSubmit}>
+                    <input
+                      type="text"
+                      className="form-control"
+                      placeholder="Search"
+                      aria-label="Search"
+                      value={searchQuery}
+                      onChange={handleSearchInputChange}
+                    />
                     <div className="input-group-append">
-                      <button className="btn btn-outline-secondary btn-sm h-100">GO</button>
+                      <button className="btn btn-outline-secondary btn-sm h-100" type="submit">
+                        GO
+                      </button>
                     </div>
-                  </div>
+                  </form>
                 </li>
               </ul>
             </div>

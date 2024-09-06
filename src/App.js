@@ -5,6 +5,8 @@ import { HomePage } from "./pages/HomePage";
 
 //ho aggiunto la lista preferiti sulla sideBar e quando premi una canzone nella lista comprare nel player
 //per aggiungere una canzone ai preferiti si fà tramite player, con l'icona del cuoricino
+//funziona anche la ricerca, per ritornare allo stato precedente senza ricaricare la pagina (dato che redux non è persistente)
+//basta premere invio quando la stringa è vuota all'interno della search
 
 function App() {
   return (
