@@ -7,6 +7,7 @@ import { HomePage } from "./pages/HomePage";
 //per aggiungere una canzone ai preferiti si fà tramite player, con l'icona del cuoricino
 //funziona anche la ricerca, per ritornare allo stato precedente senza ricaricare la pagina (dato che redux non è persistente)
 //basta premere invio quando la stringa è vuota all'interno della search
+//ho reso il redux persistente. In questo modo la lista dei preferiti non si cancella
 
 function App() {
   return (
