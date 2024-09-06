@@ -89,7 +89,9 @@ const albumCard = (singleSong) => {
                 <div className="nav-btn">
                   <button className="btn signup-btn" type="button">Sign Up</button>
                   <button className="btn login-btn" type="button">Login</button>
+                  <div>
                   <a href="#">Cookie Policy</a> | <a href="#"> Privacy</a>
+                  </div>
                 </div>
               </nav>
             </aside>
