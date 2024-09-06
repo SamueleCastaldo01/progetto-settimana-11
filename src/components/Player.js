@@ -122,6 +122,15 @@ export function Player() {
     }
   };
 
+  const handleNextTrack = () => {
+    if (queue.length > 0) {
+      const nextTrack = queue[0];
+      dispatch(setCurrentTrack(nextTrack));
+      dispatch(setIsPlaying(true));
+      dispatch(removeFromQueue(nextTrack.id)); // Rimuovi la canzone dalla coda
+    }
+  };
+
   const truncateText = (text) => {
     return text.length > MAX_TEXT_LENGTH
       ? text.slice(0, MAX_TEXT_LENGTH) + "..."
@@ -218,7 +227,7 @@ export function Player() {
                 <IconButton
                   onClick={(e) => {
                     e.preventDefault();
-                    // Gestisci la traccia successiva qui
+                    handleNextTrack(); // Avanza alla traccia successiva
                   }}
                 >
                   <SkipNextIcon sx={{ color: "#FFFFFF" }} />

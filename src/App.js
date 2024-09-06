@@ -9,6 +9,9 @@ import { HomePage } from "./pages/HomePage";
 //basta premere invio quando la stringa è vuota all'interno della search
 //ho reso il redux persistente. In questo modo la lista dei preferiti non si cancella
 //sono riusctio ad aggiungere anche la coda tramite redux
+//Se si preme il comando per la traccia successiva funziona in base agli elementi che sono stati aggiunti alla coda
+//il tasto per andare a quella precedente non lo ho fatto funzionare, perché quando passa alla prossia eliminia quella canzone dalla coda
+//il volume funziona. E non ho voluto far funzionare lo shuffle perché preferisco che la coda si mantenga nell'ordine in cui li ho inseriti
 
 //bug alcune vole le tracce delle canzoni si sovrappongo tra loro, basta ricarca la pagina. Devo risolvere
 
