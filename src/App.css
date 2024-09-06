@@ -81,6 +81,11 @@ ul {
   padding-left: 3px;
 }
 
+.nav-fav {
+  margin: 0 auto;
+  height: 400px;
+}
+
 .nav-btn {
   margin-top: auto; /* Aggiungi questo per posizionare la sezione in basso */
   margin: 0 auto;
@@ -213,4 +218,8 @@ ul {
 
 .mainPage img {
   width: 200px;
+}
+
+.list-unstyled a {
+   color: white;
 }
