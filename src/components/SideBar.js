@@ -41,12 +41,12 @@ export function SideBar({ onTrackSelect }) {
             <div className="navbar-nav">
               <ul>
                 <li>
-                  <a className="nav-item nav-link d-flex align-items-center" href="#">
+                  <a className="nav-item nav-link d-flex align-items-center" href="">
                     <i className="bi bi-house-door-fill"></i>&nbsp; Home
                   </a>
                 </li>
                 <li>
-                  <a className="nav-item nav-link d-flex align-items-center" href="#">
+                  <a className="nav-item nav-link d-flex align-items-center" href="">
                     <i className="bi bi-book-fill"></i>&nbsp; Your Library
                   </a>
                 </li>
@@ -80,7 +80,7 @@ export function SideBar({ onTrackSelect }) {
                   <li key={track._id} className="mb-2">
                     <a
                       className=""
-                      href="#"
+                      href=""
                       onClick={(e) => {
                         e.preventDefault();
                         onTrackSelect(track);
