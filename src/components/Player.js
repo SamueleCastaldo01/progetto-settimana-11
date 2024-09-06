@@ -1,7 +1,7 @@
 // src/components/Player.js
 import React, { useState, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { setCurrentTrack, setIsPlaying, setVolume } from '../redux/actions';
+import { setIsPlaying, setVolume } from '../redux/actions';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import PauseIcon from '@mui/icons-material/Pause';
 import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';

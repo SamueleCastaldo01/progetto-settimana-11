@@ -34,18 +34,6 @@ export function HomePage() {
     fetchMusic('eminem', setHipHopMusic);
   }, []);
 
-  const handlePlayPause = () => {
-    dispatch(setIsPlaying(!isPlaying));
-  };
-
-  const handleNext = () => {
-    // Logica per cambiare alla canzone successiva
-  };
-
-  const handlePrevious = () => {
-    // Logica per cambiare alla canzone precedente
-  };
-
   const handleTrackSelect = (track) => {
     dispatch(setCurrentTrack(track));
     dispatch(setIsPlaying(true)); // Avvia la riproduzione quando viene selezionata una canzone
@@ -105,13 +93,7 @@ export function HomePage() {
           </main>
         </div>
       </div>
-      <Player 
-        currentTrack={currentTrack} 
-        isPlaying={isPlaying} 
-        onPlayPause={handlePlayPause} 
-        onNext={handleNext} 
-        onPrevious={handlePrevious} 
-      />
+      <Player />
     </>
   );
 }
