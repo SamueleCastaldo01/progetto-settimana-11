@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { setIsPlaying, setVolume } from "../redux/actions";
+import { setIsPlaying, setVolume, addFavorites, removeFavorites } from "../redux/actions";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import PauseIcon from "@mui/icons-material/Pause";
 import SkipPreviousIcon from "@mui/icons-material/SkipPrevious";
@@ -19,30 +19,45 @@ export function Player() {
   const { currentTrack, isPlaying, volume } = useSelector(
     (state) => state.player
   );
+  const favorites = useSelector((state) => state.favorites.content);
 
   const [audio, setAudio] = useState(null);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const audioRef = useRef(null);
 
+  // Funzioni per gestire gli eventi dell'audio
+  const onLoadedMetadata = (event) => {
+    setDuration(event.target.duration);
+  };
+
+  const onTimeUpdate = (event) => {
+    setCurrentTime(event.target.currentTime);
+  };
+
   useEffect(() => {
     if (currentTrack) {
+      // Interrompe e pulisce la traccia precedente
       if (audio) {
         audio.pause();
         audio.currentTime = 0;
+        audio.removeEventListener("loadedmetadata", onLoadedMetadata);
+        audio.removeEventListener("timeupdate", onTimeUpdate);
       }
 
+      // Crea una nuova istanza di Audio
       const newAudio = new Audio(currentTrack.preview);
       setAudio(newAudio);
       audioRef.current = newAudio;
 
-      newAudio.addEventListener("loadedmetadata", () => {
-        setDuration(newAudio.duration);
-      });
+      // Aggiungi i listener alla nuova traccia
+      newAudio.addEventListener("loadedmetadata", onLoadedMetadata);
+      newAudio.addEventListener("timeupdate", onTimeUpdate);
 
-      newAudio.addEventListener("timeupdate", () => {
-        setCurrentTime(newAudio.currentTime);
-      });
+      return () => {
+        newAudio.removeEventListener("loadedmetadata", onLoadedMetadata);
+        newAudio.removeEventListener("timeupdate", onTimeUpdate);
+      };
     }
   }, [currentTrack]);
 
@@ -96,6 +111,18 @@ export function Player() {
     return `${minutes}:${seconds < 10 ? `0${seconds}` : seconds}`;
   };
 
+  const handleFavoriteToggle = () => {
+    if (currentTrack) {
+      const isFavorite = favorites.some(fav => fav._id === currentTrack._id);
+
+      if (isFavorite) {
+        dispatch(removeFavorites(currentTrack._id));
+      } else {
+        dispatch(addFavorites(currentTrack));
+      }
+    }
+  };
+
   return (
     <div className="container-fluid fixed-bottom bg-container pt-1">
       <div className="row h-100">
@@ -111,29 +138,31 @@ export function Player() {
                     className="img-thumbnail me-2"
                     style={{ width: 50, height: 50 }}
                   />
-                  <div className="text-white">
-                    <div
-                      className="text-truncate"
-                      style={{ maxWidth: "150px" }}
-                    >
-                      {truncateText(currentTrack.title)}
-                    </div>
-                    <div
-                      className="text-truncate"
-                      style={{ maxWidth: "150px" }}
-                    >
-                      {truncateText(currentTrack.artist.name)}
-                    </div>
-                  </div>
-                  <div className="ms-2">
-                      <IconButton>
-                        {true ? (  // Cambia con la condizione per il cuore pieno o vuoto
+                  <div className="text-white d-flex align-items-center">
+                    <div className="me-2">
+                      <IconButton onClick={handleFavoriteToggle}>
+                        {favorites.some(fav => fav._id === currentTrack._id) ? (
                           <FavoriteIcon sx={{ color: '#FFFFFF' }} />
                         ) : (
                           <FavoriteBorderIcon sx={{ color: '#FFFFFF' }} />
                         )}
                       </IconButton>
                     </div>
+                    <div>
+                      <div
+                        className="text-truncate"
+                        style={{ maxWidth: "150px" }}
+                      >
+                        {truncateText(currentTrack.title)}
+                      </div>
+                      <div
+                        className="text-truncate"
+                        style={{ maxWidth: "150px" }}
+                      >
+                        {truncateText(currentTrack.artist.name)}
+                      </div>
+                    </div>
+                  </div>
                 </div>
               )}
             </div>

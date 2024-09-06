@@ -7,19 +7,15 @@ export const SET_IS_PLAYING = "SET_IS_PLAYING";
 export const SET_VOLUME = "SET_VOLUME";
 
 
-export const RemoveFav = (sel) => {
-    return {
+export const addFavorites = (track) => ({
+    type: ADD_FAVORITES,
+    payload: track,
+  });
+  
+  export const removeFavorites = (trackId) => ({
     type: REMOVE_FAVORITES,
-    payload: sel
-    }
-}
-
-export const AddFav = (sel) => {
-    return {
-        type: ADD_FAVORITES,
-        payload: sel
-    }
-}
+    payload: trackId,
+  });
 
 export const setCurrentTrack = (track) => ({
     type: SET_CURRENT_TRACK,
