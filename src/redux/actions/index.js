@@ -76,9 +76,9 @@ export const setCurrentTrack = (track) => ({
     payload: track,
   });
   
-  export const removeFromQueue = (track) => ({
-    type: "REMOVE_FROM_QUEUE",
-    payload: track,
+  export const removeFromQueue = (trackId) => ({
+    type: 'REMOVE_FROM_QUEUE',
+    payload: trackId,
   });
   
   export const clearQueue = () => ({

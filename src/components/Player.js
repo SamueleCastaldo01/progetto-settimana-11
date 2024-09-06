@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
-setCurrentTrack,
+  setCurrentTrack,
   setIsPlaying,
   setVolume,
   addFavorites,
   removeFavorites,
-  removeFromQueue, // Importa l'azione per rimuovere dalla coda
+  removeFromQueue,
 } from "../redux/actions";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import PauseIcon from "@mui/icons-material/Pause";
@@ -66,10 +66,20 @@ export function Player() {
           newAudio.addEventListener("timeupdate", onTimeUpdate);
 
           if (isPlaying) {
-            newAudio
-              .play()
-              .catch((err) => console.error("Error playing audio:", err));
+            newAudio.play().catch((err) => console.error("Error playing audio:", err));
           }
+
+          // Aggiungi l'evento per gestire la fine della traccia
+          newAudio.addEventListener("ended", () => {
+            console.log("Track ended, current queue:", queue);
+            if (queue.length > 0) {
+              const nextTrack = queue[0];
+              console.log("Playing next track:", nextTrack);
+              dispatch(setCurrentTrack(nextTrack));
+              dispatch(setIsPlaying(true));
+              dispatch(removeFromQueue(nextTrack.id)); // Rimuovi la canzone dalla coda
+            }
+          });
         }, AUDIO_SWITCH_DELAY);
       }
     };
@@ -96,16 +106,6 @@ export function Player() {
       }
     }
   }, [isPlaying, audio, volume]);
-
-  useEffect(() => {
-    if (audio && audio.ended && queue.length > 0) {
-      // Passa alla prossima canzone nella coda
-      const nextTrack = queue[0];
-      dispatch(setCurrentTrack(nextTrack));
-      dispatch(setIsPlaying(true));
-      dispatch(removeFromQueue(nextTrack.id)); // Rimuovi la canzone dalla coda
-    }
-  }, [audio, queue, dispatch]);
 
   const handlePlayPause = () => {
     dispatch(setIsPlaying(!isPlaying));

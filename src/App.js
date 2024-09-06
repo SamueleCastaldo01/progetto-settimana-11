@@ -8,6 +8,9 @@ import { HomePage } from "./pages/HomePage";
 //funziona anche la ricerca, per ritornare allo stato precedente senza ricaricare la pagina (dato che redux non è persistente)
 //basta premere invio quando la stringa è vuota all'interno della search
 //ho reso il redux persistente. In questo modo la lista dei preferiti non si cancella
+//sono riusctio ad aggiungere anche la coda tramite redux
+
+//bug alcune vole le tracce delle canzoni si sovrappongo tra loro, basta ricarca la pagina. Devo risolvere
 
 function App() {
   return (
