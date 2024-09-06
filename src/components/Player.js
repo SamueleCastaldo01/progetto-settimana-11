@@ -1,6 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { setIsPlaying, setVolume, addFavorites, removeFavorites } from "../redux/actions";
+import {
+  setIsPlaying,
+  setVolume,
+  addFavorites,
+  removeFavorites,
+} from "../redux/actions";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import PauseIcon from "@mui/icons-material/Pause";
 import SkipPreviousIcon from "@mui/icons-material/SkipPrevious";
@@ -13,6 +18,7 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { IconButton, Slider } from "@mui/material";
 
 const MAX_TEXT_LENGTH = 20; // Lunghezza massima per troncamento
+const AUDIO_SWITCH_DELAY = 500; // Delay in milliseconds to ensure audio switch
 
 export function Player() {
   const dispatch = useDispatch();
@@ -36,29 +42,45 @@ export function Player() {
   };
 
   useEffect(() => {
-    if (currentTrack) {
-      // Interrompe e pulisce la traccia precedente
+    const switchTrack = () => {
       if (audio) {
+        // Pulisci e rimuovi l'audio precedente
         audio.pause();
         audio.currentTime = 0;
         audio.removeEventListener("loadedmetadata", onLoadedMetadata);
         audio.removeEventListener("timeupdate", onTimeUpdate);
+        setAudio(null);
       }
 
-      // Crea una nuova istanza di Audio
-      const newAudio = new Audio(currentTrack.preview);
-      setAudio(newAudio);
-      audioRef.current = newAudio;
+      if (currentTrack) {
+        // Delay per assicurare che la traccia precedente sia completamente fermata
+        setTimeout(() => {
+          const newAudio = new Audio(currentTrack.preview);
+          setAudio(newAudio);
+          audioRef.current = newAudio;
 
-      // Aggiungi i listener alla nuova traccia
-      newAudio.addEventListener("loadedmetadata", onLoadedMetadata);
-      newAudio.addEventListener("timeupdate", onTimeUpdate);
+          newAudio.addEventListener("loadedmetadata", onLoadedMetadata);
+          newAudio.addEventListener("timeupdate", onTimeUpdate);
 
-      return () => {
-        newAudio.removeEventListener("loadedmetadata", onLoadedMetadata);
-        newAudio.removeEventListener("timeupdate", onTimeUpdate);
-      };
-    }
+          if (isPlaying) {
+            newAudio
+              .play()
+              .catch((err) => console.error("Error playing audio:", err));
+          }
+        }, AUDIO_SWITCH_DELAY);
+      }
+    };
+
+    switchTrack();
+
+    return () => {
+      if (audio) {
+        audio.pause();
+        audio.removeEventListener("loadedmetadata", onLoadedMetadata);
+        audio.removeEventListener("timeupdate", onTimeUpdate);
+        setAudio(null);
+      }
+    };
   }, [currentTrack]);
 
   useEffect(() => {
@@ -113,7 +135,7 @@ export function Player() {
 
   const handleFavoriteToggle = () => {
     if (currentTrack) {
-      const isFavorite = favorites.some(fav => fav.id === currentTrack.id);
+      const isFavorite = favorites.some((fav) => fav.id === currentTrack.id);
       if (isFavorite) {
         dispatch(removeFavorites(currentTrack.id));
       } else {
@@ -122,7 +144,8 @@ export function Player() {
     }
   };
 
-  const isCurrentTrackFavorite = currentTrack && favorites.some(fav => fav.id === currentTrack.id);
+  const isCurrentTrackFavorite =
+    currentTrack && favorites.some((fav) => fav.id === currentTrack.id);
 
   return (
     <div className="container-fluid fixed-bottom bg-container pt-1">
@@ -143,9 +166,9 @@ export function Player() {
                     <div className="me-2">
                       <IconButton onClick={handleFavoriteToggle}>
                         {isCurrentTrackFavorite ? (
-                          <FavoriteIcon sx={{ color: '#FFFFFF' }} />
+                          <FavoriteIcon sx={{ color: "#FFFFFF" }} />
                         ) : (
-                          <FavoriteBorderIcon sx={{ color: '#FFFFFF' }} />
+                          <FavoriteBorderIcon sx={{ color: "#FFFFFF" }} />
                         )}
                       </IconButton>
                     </div>

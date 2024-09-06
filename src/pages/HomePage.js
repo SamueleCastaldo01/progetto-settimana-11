@@ -1,4 +1,3 @@
-// src/components/HomePage.js
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setCurrentTrack, setIsPlaying } from '../redux/actions';
@@ -43,7 +42,7 @@ export function HomePage() {
     <>
       <div className="container-fluid">
         <div className="row">
-          <SideBar />
+          <SideBar onTrackSelect={handleTrackSelect} />
           <main className="col-12 col-md-9 offset-md-3 mainPage">
             <div className="row">
               <div className="col-9 col-lg-11 mainLinks d-none d-md-flex">
