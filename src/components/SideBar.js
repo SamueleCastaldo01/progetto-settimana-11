@@ -1,4 +1,10 @@
+import React from 'react';
+import { useSelector } from 'react-redux';
+
 export function SideBar() {
+  // Usa useSelector per ottenere l'elenco dei preferiti
+  const favorites = useSelector((state) => state.favorites.content);
+
   return (
     <>
       <aside className="col col-2">
@@ -63,6 +69,24 @@ export function SideBar() {
                 </ul>
               </div>
             </div>
+          </div>
+          <div className='text-center'>  
+        <div className="favorites-section mt-3">
+          <h5>Your Favorites</h5>
+          <ul className="list-unstyled">
+            {favorites.length > 0 ? (
+              favorites.map((track) => (
+                <li key={track._id} className="mb-2">
+                  <a href="#" className="text-decoration-none">
+                    {track.title}
+                  </a>
+                </li>
+              ))
+            ) : (
+              <li>No favorites yet</li>
+            )}
+          </ul>
+        </div>
           </div>
           <div className="nav-btn">
             <button className="btn signup-btn" type="button">

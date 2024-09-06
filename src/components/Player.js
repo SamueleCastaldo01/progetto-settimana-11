@@ -113,15 +113,16 @@ export function Player() {
 
   const handleFavoriteToggle = () => {
     if (currentTrack) {
-      const isFavorite = favorites.some(fav => fav._id === currentTrack._id);
-
+      const isFavorite = favorites.some(fav => fav.id === currentTrack.id);
       if (isFavorite) {
-        dispatch(removeFavorites(currentTrack._id));
+        dispatch(removeFavorites(currentTrack.id));
       } else {
         dispatch(addFavorites(currentTrack));
       }
     }
   };
+
+  const isCurrentTrackFavorite = currentTrack && favorites.some(fav => fav.id === currentTrack.id);
 
   return (
     <div className="container-fluid fixed-bottom bg-container pt-1">
@@ -141,7 +142,7 @@ export function Player() {
                   <div className="text-white d-flex align-items-center">
                     <div className="me-2">
                       <IconButton onClick={handleFavoriteToggle}>
-                        {favorites.some(fav => fav._id === currentTrack._id) ? (
+                        {isCurrentTrackFavorite ? (
                           <FavoriteIcon sx={{ color: '#FFFFFF' }} />
                         ) : (
                           <FavoriteBorderIcon sx={{ color: '#FFFFFF' }} />

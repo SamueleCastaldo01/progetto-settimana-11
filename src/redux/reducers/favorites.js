@@ -9,7 +9,7 @@ const FavoritesRed = (state = initialState, action) => {
   switch (action.type) {
     case ADD_FAVORITES:
       // Controlla se il brano è già presente per evitare duplicati
-      const isAlreadyFavorite = state.content.some(fav => fav._id === action.payload._id);
+      const isAlreadyFavorite = state.content.some(fav => fav.id === action.payload.id);
       
       if (isAlreadyFavorite) {
         console.log("Il brano è già nei preferiti:", action.payload);
@@ -29,7 +29,7 @@ const FavoritesRed = (state = initialState, action) => {
     case REMOVE_FAVORITES:
       const updatedState = {
         ...state,
-        content: state.content.filter((fav) => fav._id !== action.payload),
+        content: state.content.filter((fav) => fav.id !== action.payload),
       };
 
       console.log("Azione REMOVE_FAVORITES:");
