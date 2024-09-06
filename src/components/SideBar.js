@@ -1,9 +1,11 @@
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { getSearchResults } from "../redux/actions";
 
-export function SideBar({ onTrackSelect, onSearch }) {
+export function SideBar({ onTrackSelect }) {
   const favorites = useSelector((state) => state.favorites.content);
   const [searchQuery, setSearchQuery] = useState('');
+  const dispatch = useDispatch();
 
   const handleSearchInputChange = (e) => {
     setSearchQuery(e.target.value);
@@ -11,7 +13,10 @@ export function SideBar({ onTrackSelect, onSearch }) {
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
-    onSearch(searchQuery); // Invia la query di ricerca alla HomePage
+    console.log("Search submit triggered, query:", searchQuery);
+    if (searchQuery.trim()) {
+      dispatch(getSearchResults(searchQuery)); // Lancia l'azione di ricerca
+    }
   };
 
   return (

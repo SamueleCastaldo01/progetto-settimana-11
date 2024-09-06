@@ -94,18 +94,6 @@ export function Player() {
     }
   }, [isPlaying, audio, volume]);
 
-  useEffect(() => {
-    const handleKeyDown = (event) => {
-      if (event.code === "Space") {
-        event.preventDefault(); // Previene il comportamento predefinito della barra spaziatrice (scrolling della pagina)
-        dispatch(setIsPlaying(!isPlaying));
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [isPlaying, dispatch]);
-
   const handlePlayPause = () => {
     dispatch(setIsPlaying(!isPlaying));
   };

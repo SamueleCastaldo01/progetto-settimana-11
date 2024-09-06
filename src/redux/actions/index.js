@@ -5,6 +5,8 @@ export const GET_JOB_LIST_ERROR = "GET_JOB_LIST_ERROR"
 export const SET_CURRENT_TRACK = "SET_CURRENT_TRACK";
 export const SET_IS_PLAYING = "SET_IS_PLAYING";
 export const SET_VOLUME = "SET_VOLUME";
+export const GET_SEARCH_RESULTS = 'GET_SEARCH_RESULTS';
+export const GET_SEARCH_RESULTS_ERROR = 'GET_SEARCH_RESULTS_ERROR';
 
 
 export const addFavorites = (track) => ({
@@ -31,3 +33,33 @@ export const setCurrentTrack = (track) => ({
     type: SET_VOLUME,
     payload: volume,
   });
+
+  export const getSearchResults = (query) => {
+    return async (dispatch) => {
+      const baseEndpoint = "https://striveschool-api.herokuapp.com/api/deezer/search?q=";
+      console.log("Fetching from:", baseEndpoint + query);  // Verifica l'endpoint completo
+      
+      try {
+        const response = await fetch(baseEndpoint + query);
+        if (response.ok) {
+          const { data } = await response.json();
+          console.log("Search results data:", data);  // Verifica i dati della risposta
+          dispatch({
+            type: GET_SEARCH_RESULTS,
+            payload: data,
+          });
+        } else {
+          console.log("Error fetching search results");
+          dispatch({
+            type: GET_SEARCH_RESULTS_ERROR,
+          });
+        }
+      } catch (error) {
+        console.log("Error in fetch:", error);
+        dispatch({
+          type: GET_SEARCH_RESULTS_ERROR,
+        });
+      }
+    };
+  };
+  
