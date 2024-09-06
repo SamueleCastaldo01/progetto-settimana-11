@@ -1,6 +1,6 @@
-const AlbumCard = ({singleSong}) => {
+const AlbumCard = ({ singleSong, onClick }) => {
     return (
-      <div className="col text-center" key={singleSong.id}>
+      <div className="col text-center" key={singleSong.id} onClick={() => onClick(singleSong)}>
         <img className="img-fluid" src={singleSong.album.cover_medium} alt="track" />
         <p>
           Track: "{singleSong.title}"<br />
@@ -9,4 +9,6 @@ const AlbumCard = ({singleSong}) => {
       </div>
     );
   };
+  
   export default AlbumCard;
+  

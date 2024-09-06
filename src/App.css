@@ -156,10 +156,6 @@ ul {
   filter: brightness(60%);
 }
 
-.playerControls a:hover {
-  filter: brightness(80%);
-  color: #282828 !important;
-}
 
 .progress {
   color: white;
