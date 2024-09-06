@@ -1,7 +1,10 @@
-import React, { useEffect, useState } from 'react';
+// src/components/HomePage.js
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { setCurrentTrack, setIsPlaying } from '../redux/actions';
 import { SideBar } from '../components/SideBar';
 import AlbumCard from '../components/AlbumCard';
-import { Player } from '../components/Player'; // Importa il componente Player
+import { Player } from '../components/Player';
 
 const fetchMusic = async (artistName, setMusicSection) => {
   try {
@@ -18,11 +21,12 @@ const fetchMusic = async (artistName, setMusicSection) => {
 };
 
 export function HomePage() {
-  const [rockMusic, setRockMusic] = useState([]);
-  const [popMusic, setPopMusic] = useState([]);
-  const [hipHopMusic, setHipHopMusic] = useState([]);
-  const [currentTrack, setCurrentTrack] = useState(null);
-  const [isPlaying, setIsPlaying] = useState(false);
+  const dispatch = useDispatch();
+  const { currentTrack, isPlaying } = useSelector((state) => state.player);
+  
+  const [rockMusic, setRockMusic] = React.useState([]);
+  const [popMusic, setPopMusic] = React.useState([]);
+  const [hipHopMusic, setHipHopMusic] = React.useState([]);
 
   useEffect(() => {
     fetchMusic('queen', setRockMusic);
@@ -31,7 +35,7 @@ export function HomePage() {
   }, []);
 
   const handlePlayPause = () => {
-    setIsPlaying(!isPlaying);
+    dispatch(setIsPlaying(!isPlaying));
   };
 
   const handleNext = () => {
@@ -43,8 +47,8 @@ export function HomePage() {
   };
 
   const handleTrackSelect = (track) => {
-    setCurrentTrack(track);
-    setIsPlaying(true); // Avvia la riproduzione quando viene selezionata una canzone
+    dispatch(setCurrentTrack(track));
+    dispatch(setIsPlaying(true)); // Avvia la riproduzione quando viene selezionata una canzone
   };
 
   return (
