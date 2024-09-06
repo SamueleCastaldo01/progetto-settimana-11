@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
+setCurrentTrack,
   setIsPlaying,
   setVolume,
   addFavorites,
   removeFavorites,
+  removeFromQueue, // Importa l'azione per rimuovere dalla coda
 } from "../redux/actions";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import PauseIcon from "@mui/icons-material/Pause";
@@ -25,6 +27,7 @@ export function Player() {
   const { currentTrack, isPlaying, volume } = useSelector(
     (state) => state.player
   );
+  const { queue } = useSelector((state) => state.queue); // Ottieni la coda dallo stato
   const favorites = useSelector((state) => state.favorites.content);
 
   const [audio, setAudio] = useState(null);
@@ -93,6 +96,16 @@ export function Player() {
       }
     }
   }, [isPlaying, audio, volume]);
+
+  useEffect(() => {
+    if (audio && audio.ended && queue.length > 0) {
+      // Passa alla prossima canzone nella coda
+      const nextTrack = queue[0];
+      dispatch(setCurrentTrack(nextTrack));
+      dispatch(setIsPlaying(true));
+      dispatch(removeFromQueue(nextTrack.id)); // Rimuovi la canzone dalla coda
+    }
+  }, [audio, queue, dispatch]);
 
   const handlePlayPause = () => {
     dispatch(setIsPlaying(!isPlaying));

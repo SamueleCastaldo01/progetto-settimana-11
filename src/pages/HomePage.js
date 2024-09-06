@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setCurrentTrack, setIsPlaying, getSearchResults, resetSearchResults } from '../redux/actions';
+import { setCurrentTrack, setIsPlaying, getSearchResults, resetSearchResults, addToQueue } from '../redux/actions';
 import { SideBar } from '../components/SideBar';
 import AlbumCard from '../components/AlbumCard';
 import { Player } from '../components/Player';
@@ -43,7 +43,11 @@ export function HomePage() {
 
   const handleTrackSelect = (track) => {
     dispatch(setCurrentTrack(track));
-    dispatch(setIsPlaying(true)); // Avvia la riproduzione quando viene selezionata una canzone
+    dispatch(setIsPlaying(true));
+  };
+
+  const handleAddToQueue = (track) => {
+    dispatch(addToQueue(track));
   };
 
   const handleBackToHome = () => {
@@ -87,7 +91,12 @@ export function HomePage() {
                     </div>
                     <div className="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xl-4 imgLinks py-3" id="searchSection">
                       {searchResults.map(song => (
-                        <AlbumCard key={song.id} singleSong={song} onClick={() => handleTrackSelect(song)} />
+                        <AlbumCard 
+                          key={song.id} 
+                          singleSong={song} 
+                          onClick={handleTrackSelect} 
+                          onAddToQueue={handleAddToQueue} 
+                        />
                       ))}
                     </div>
                   </div>
@@ -97,7 +106,12 @@ export function HomePage() {
                       <h2>Rock Classics</h2>
                       <div className="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xl-4 imgLinks py-3" id="rockSection">
                         {rockMusic.map(song => (
-                          <AlbumCard key={song.id} singleSong={song} onClick={() => handleTrackSelect(song)} />
+                          <AlbumCard 
+                            key={song.id} 
+                            singleSong={song} 
+                            onClick={handleTrackSelect} 
+                            onAddToQueue={handleAddToQueue} 
+                          />
                         ))}
                       </div>
                     </div>
@@ -105,7 +119,12 @@ export function HomePage() {
                       <h2>Pop Culture</h2>
                       <div className="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xl-4 imgLinks py-3" id="popSection">
                         {popMusic.map(song => (
-                          <AlbumCard key={song.id} singleSong={song} onClick={() => handleTrackSelect(song)} />
+                          <AlbumCard 
+                            key={song.id} 
+                            singleSong={song} 
+                            onClick={handleTrackSelect} 
+                            onAddToQueue={handleAddToQueue} 
+                          />
                         ))}
                       </div>
                     </div>
@@ -113,7 +132,12 @@ export function HomePage() {
                       <h2>#HipHop</h2>
                       <div className="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xl-4 imgLinks py-3" id="hipHopSection">
                         {hipHopMusic.map(song => (
-                          <AlbumCard key={song.id} singleSong={song} onClick={() => handleTrackSelect(song)} />
+                          <AlbumCard 
+                            key={song.id} 
+                            singleSong={song} 
+                            onClick={handleTrackSelect} 
+                            onAddToQueue={handleAddToQueue} 
+                          />
                         ))}
                       </div>
                     </div>

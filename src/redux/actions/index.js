@@ -8,7 +8,9 @@ export const SET_VOLUME = "SET_VOLUME";
 export const GET_SEARCH_RESULTS = 'GET_SEARCH_RESULTS';
 export const GET_SEARCH_RESULTS_ERROR = 'GET_SEARCH_RESULTS_ERROR';
 export const RESET_SEARCH_RESULTS = 'RESET_SEARCH_RESULTS';
-
+export const ADD_TO_QUEUE = 'ADD_TO_QUEUE';
+export const REMOVE_FROM_QUEUE = 'REMOVE_FROM_QUEUE';
+export const CLEAR_QUEUE = 'CLEAR_QUEUE';
 
 export const addFavorites = (track) => ({
     type: ADD_FAVORITES,
@@ -68,3 +70,17 @@ export const setCurrentTrack = (track) => ({
     type: RESET_SEARCH_RESULTS,
   });
   
+
+  export const addToQueue = (track) => ({
+    type: ADD_TO_QUEUE,
+    payload: track,
+  });
+  
+  export const removeFromQueue = (track) => ({
+    type: "REMOVE_FROM_QUEUE",
+    payload: track,
+  });
+  
+  export const clearQueue = () => ({
+    type: "CLEAR_QUEUE",
+  });
