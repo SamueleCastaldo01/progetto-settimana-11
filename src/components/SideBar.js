@@ -79,7 +79,7 @@ export function SideBar({ onTrackSelect }) {
                 favorites.map((track) => (
                   <li key={track._id} className="mb-2">
                     <a
-                      className="text-decoration-none"
+                      className=""
                       href="#"
                       onClick={(e) => {
                         e.preventDefault();
