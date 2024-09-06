@@ -1,4 +1,8 @@
-import { GET_SEARCH_RESULTS, GET_SEARCH_RESULTS_ERROR } from "../actions";
+import {
+  GET_SEARCH_RESULTS,
+  GET_SEARCH_RESULTS_ERROR,
+  RESET_SEARCH_RESULTS,
+} from "../actions";
 
 const initialState = {
   searchResults: [],
@@ -18,6 +22,11 @@ const searchRed = (state = initialState, action) => {
         ...state,
         searchResults: [],
         error: true,
+      };
+    case RESET_SEARCH_RESULTS:
+      return {
+        ...state,
+        searchResults: [], // Resetta i risultati della ricerca
       };
     default:
       return state;

@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setCurrentTrack, setIsPlaying, getSearchResults } from '../redux/actions'; // Importa getSearchResults
+import { setCurrentTrack, setIsPlaying, getSearchResults, resetSearchResults } from '../redux/actions';
 import { SideBar } from '../components/SideBar';
 import AlbumCard from '../components/AlbumCard';
 import { Player } from '../components/Player';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 const fetchMusic = async (artistName, setMusicSection) => {
   try {
@@ -23,42 +24,43 @@ export function HomePage() {
   const dispatch = useDispatch();
   const { searchResults } = useSelector((state) => state.search);
 
-  useEffect(() => {
-    console.log("Search results updated:", searchResults);
-  }, [searchResults]);
-
   const [rockMusic, setRockMusic] = useState([]);
   const [popMusic, setPopMusic] = useState([]);
   const [hipHopMusic, setHipHopMusic] = useState([]);
-  const [isSearching, setIsSearching] = useState(false); // Stato per sapere se è attiva la ricerca
+  const [querySearch, setQuerySearch] = useState("");
 
   useEffect(() => {
-    if (!isSearching) {  // Se non si sta cercando, mostra le sezioni iniziali
-      fetchMusic('queen', setRockMusic);
-      fetchMusic('katyperry', setPopMusic);
-      fetchMusic('eminem', setHipHopMusic);
+    fetchMusic('queen', setRockMusic);
+    fetchMusic('katyperry', setPopMusic);
+    fetchMusic('eminem', setHipHopMusic);
+  }, []);
+
+  useEffect(() => {
+    if (querySearch.trim()) {
+      dispatch(getSearchResults(querySearch));
     }
-  }, [isSearching]);
+  }, [querySearch, dispatch]);
 
   const handleTrackSelect = (track) => {
     dispatch(setCurrentTrack(track));
     dispatch(setIsPlaying(true)); // Avvia la riproduzione quando viene selezionata una canzone
   };
 
-  const handleSearch = (query) => {
-    if (query.trim()) {
-      setIsSearching(true); // Imposta lo stato di ricerca
-      dispatch(getSearchResults(query)); // Usa Redux per gestire la ricerca
-    } else {
-      setIsSearching(false); // Se non c'è query, disabilita la ricerca e mostra i default
-    }
+  const handleBackToHome = () => {
+    setQuerySearch(""); // Svuota la query di ricerca
+    dispatch(resetSearchResults()); // Resetta i risultati della ricerca
   };
+
+  const handleSearch = (query) => {
+    setQuerySearch(query);
+  };
+
+  const hasSearchResults = searchResults.length > 0;
 
   return (
     <>
       <div className="container-fluid">
         <div className="row">
-          {/* Passa la funzione handleSearch alla Sidebar */}
           <SideBar onTrackSelect={handleTrackSelect} onSearch={handleSearch} />
           <main className="col-12 col-md-9 offset-md-3 mainPage">
             <div className="row">
@@ -72,10 +74,17 @@ export function HomePage() {
             </div>
             <div className="row">
               <div className="col-10">
-                {(searchResults.length > 0 && searchResults) ? (
-                  // Se è attiva la ricerca e ci sono risultati, mostriamo i risultati della ricerca
+                {hasSearchResults ? (
                   <div id="searchResults">
-                    <h2 className='text-white mt-3'>Search Results</h2>
+                    <div className='d-flex align-items-center mt-4'>
+                      <ArrowBackIcon 
+                        fontSize="large" 
+                        className="mr-2 me-3" 
+                        onClick={handleBackToHome} 
+                        style={{ cursor: 'pointer', color: "white" }}
+                      />
+                      <h2 className='text-white m-0'>Search Results</h2>
+                    </div>
                     <div className="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xl-4 imgLinks py-3" id="searchSection">
                       {searchResults.map(song => (
                         <AlbumCard key={song.id} singleSong={song} onClick={() => handleTrackSelect(song)} />
@@ -84,7 +93,6 @@ export function HomePage() {
                   </div>
                 ) : (
                   <>
-                    {/* Se non è attiva la ricerca o non ci sono risultati, mostra le sezioni predefinite */}
                     <div id="rock">
                       <h2>Rock Classics</h2>
                       <div className="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xl-4 imgLinks py-3" id="rockSection">

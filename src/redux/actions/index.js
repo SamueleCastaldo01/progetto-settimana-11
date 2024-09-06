@@ -7,6 +7,7 @@ export const SET_IS_PLAYING = "SET_IS_PLAYING";
 export const SET_VOLUME = "SET_VOLUME";
 export const GET_SEARCH_RESULTS = 'GET_SEARCH_RESULTS';
 export const GET_SEARCH_RESULTS_ERROR = 'GET_SEARCH_RESULTS_ERROR';
+export const RESET_SEARCH_RESULTS = 'RESET_SEARCH_RESULTS';
 
 
 export const addFavorites = (track) => ({
@@ -62,4 +63,8 @@ export const setCurrentTrack = (track) => ({
       }
     };
   };
+
+  export const resetSearchResults = () => ({
+    type: RESET_SEARCH_RESULTS,
+  });
   
