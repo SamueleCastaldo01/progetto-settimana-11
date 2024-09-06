@@ -1,19 +1,24 @@
-// src/components/Player.js
-import React, { useState, useEffect, useRef } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { setIsPlaying, setVolume } from '../redux/actions';
-import PlayArrowIcon from '@mui/icons-material/PlayArrow';
-import PauseIcon from '@mui/icons-material/Pause';
-import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
-import SkipNextIcon from '@mui/icons-material/SkipNext';
-import ShuffleIcon from '@mui/icons-material/Shuffle';
-import RepeatIcon from '@mui/icons-material/Repeat';
-import VolumeUpIcon from '@mui/icons-material/VolumeUp';
-import { IconButton, Slider } from '@mui/material';
+import React, { useState, useEffect, useRef } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { setIsPlaying, setVolume } from "../redux/actions";
+import PlayArrowIcon from "@mui/icons-material/PlayArrow";
+import PauseIcon from "@mui/icons-material/Pause";
+import SkipPreviousIcon from "@mui/icons-material/SkipPrevious";
+import SkipNextIcon from "@mui/icons-material/SkipNext";
+import ShuffleIcon from "@mui/icons-material/Shuffle";
+import RepeatIcon from "@mui/icons-material/Repeat";
+import VolumeUpIcon from "@mui/icons-material/VolumeUp";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import { IconButton, Slider } from "@mui/material";
+
+const MAX_TEXT_LENGTH = 20; // Lunghezza massima per troncamento
 
 export function Player() {
   const dispatch = useDispatch();
-  const { currentTrack, isPlaying, volume } = useSelector((state) => state.player);
+  const { currentTrack, isPlaying, volume } = useSelector(
+    (state) => state.player
+  );
 
   const [audio, setAudio] = useState(null);
   const [currentTime, setCurrentTime] = useState(0);
@@ -31,11 +36,11 @@ export function Player() {
       setAudio(newAudio);
       audioRef.current = newAudio;
 
-      newAudio.addEventListener('loadedmetadata', () => {
+      newAudio.addEventListener("loadedmetadata", () => {
         setDuration(newAudio.duration);
       });
 
-      newAudio.addEventListener('timeupdate', () => {
+      newAudio.addEventListener("timeupdate", () => {
         setCurrentTime(newAudio.currentTime);
       });
     }
@@ -45,12 +50,24 @@ export function Player() {
     if (audio) {
       audio.volume = volume;
       if (isPlaying) {
-        audio.play().catch((err) => console.error('Error playing audio:', err));
+        audio.play().catch((err) => console.error("Error playing audio:", err));
       } else {
         audio.pause();
       }
     }
   }, [isPlaying, audio, volume]);
+
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.code === "Space") {
+        event.preventDefault(); // Previene il comportamento predefinito della barra spaziatrice (scrolling della pagina)
+        dispatch(setIsPlaying(!isPlaying));
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isPlaying, dispatch]);
 
   const handlePlayPause = () => {
     dispatch(setIsPlaying(!isPlaying));
@@ -65,6 +82,12 @@ export function Player() {
       audio.currentTime = newValue;
       setCurrentTime(newValue);
     }
+  };
+
+  const truncateText = (text) => {
+    return text.length > MAX_TEXT_LENGTH
+      ? text.slice(0, MAX_TEXT_LENGTH) + "..."
+      : text;
   };
 
   const formatTime = (time) => {
@@ -89,9 +112,28 @@ export function Player() {
                     style={{ width: 50, height: 50 }}
                   />
                   <div className="text-white">
-                    <div>{currentTrack.title}</div>
-                    <div>{currentTrack.artist.name}</div>
+                    <div
+                      className="text-truncate"
+                      style={{ maxWidth: "150px" }}
+                    >
+                      {truncateText(currentTrack.title)}
+                    </div>
+                    <div
+                      className="text-truncate"
+                      style={{ maxWidth: "150px" }}
+                    >
+                      {truncateText(currentTrack.artist.name)}
+                    </div>
                   </div>
+                  <div className="ms-2">
+                      <IconButton>
+                        {true ? (  // Cambia con la condizione per il cuore pieno o vuoto
+                          <FavoriteIcon sx={{ color: '#FFFFFF' }} />
+                        ) : (
+                          <FavoriteBorderIcon sx={{ color: '#FFFFFF' }} />
+                        )}
+                      </IconButton>
+                    </div>
                 </div>
               )}
             </div>
@@ -103,10 +145,9 @@ export function Player() {
                   onClick={(e) => {
                     e.preventDefault();
                     // Gestisci la traccia precedente qui
-                    // dispatch(onPrevious());
                   }}
                 >
-                  <SkipPreviousIcon sx={{ color: '#FFFFFF' }} />
+                  <SkipPreviousIcon sx={{ color: "#FFFFFF" }} />
                 </IconButton>
                 <IconButton
                   onClick={(e) => {
@@ -115,25 +156,24 @@ export function Player() {
                   }}
                 >
                   {isPlaying ? (
-                    <PauseIcon sx={{ color: '#FFFFFF' }} />
+                    <PauseIcon sx={{ color: "#FFFFFF" }} />
                   ) : (
-                    <PlayArrowIcon sx={{ color: '#FFFFFF' }} />
+                    <PlayArrowIcon sx={{ color: "#FFFFFF" }} />
                   )}
                 </IconButton>
                 <IconButton
                   onClick={(e) => {
                     e.preventDefault();
                     // Gestisci la traccia successiva qui
-                    // dispatch(onNext());
                   }}
                 >
-                  <SkipNextIcon sx={{ color: '#FFFFFF' }} />
+                  <SkipNextIcon sx={{ color: "#FFFFFF" }} />
                 </IconButton>
                 <IconButton>
-                  <ShuffleIcon sx={{ color: '#FFFFFF' }} />
+                  <ShuffleIcon sx={{ color: "#FFFFFF" }} />
                 </IconButton>
                 <IconButton>
-                  <RepeatIcon sx={{ color: '#FFFFFF' }} />
+                  <RepeatIcon sx={{ color: "#FFFFFF" }} />
                 </IconButton>
               </div>
 
@@ -146,20 +186,20 @@ export function Player() {
                   max={duration}
                   onChange={handleProgressChange}
                   sx={{
-                    color: '#FFFFFF',
-                    '& .MuiSlider-thumb': {
-                      border: '2px solid #FFFFFF',
+                    color: "#FFFFFF",
+                    "& .MuiSlider-thumb": {
+                      border: "2px solid #FFFFFF",
                       width: 15,
                       height: 15,
-                      backgroundColor: '#FFFFFF',
+                      backgroundColor: "#FFFFFF",
                     },
-                    '& .MuiSlider-track': {
+                    "& .MuiSlider-track": {
                       height: 8,
-                      backgroundColor: '#FFFFFF',
+                      backgroundColor: "#FFFFFF",
                     },
-                    '& .MuiSlider-rail': {
+                    "& .MuiSlider-rail": {
                       height: 8,
-                      backgroundColor: '#555555',
+                      backgroundColor: "#555555",
                     },
                   }}
                 />
@@ -170,14 +210,14 @@ export function Player() {
             {/* Colonna per il controllo del volume */}
             <div className="col-3 d-flex align-items-center justify-content-center">
               <IconButton>
-                <VolumeUpIcon sx={{ color: '#FFFFFF' }} />
+                <VolumeUpIcon sx={{ color: "#FFFFFF" }} />
               </IconButton>
               <Slider
                 value={volume * 100}
                 onChange={handleVolumeChange}
                 aria-label="Volume"
                 sx={{
-                  color: '#FFFFFF',
+                  color: "#FFFFFF",
                   width: 100,
                   ml: 1,
                 }}
