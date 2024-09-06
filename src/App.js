@@ -14,6 +14,7 @@ import { HomePage } from "./pages/HomePage";
 //il volume funziona. E non ho voluto far funzionare lo shuffle perché preferisco che la coda si mantenga nell'ordine in cui li ho inseriti
 
 //bug alcune vole le tracce delle canzoni si sovrappongo tra loro, basta ricarca la pagina, oppure cambiare album. Devo risolvere
+//purtroppo non è responsive, per via del tempo. Mi sono concentrato di più sulla logica
 
 function App() {
   return (
