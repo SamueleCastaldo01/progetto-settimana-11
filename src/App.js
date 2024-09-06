@@ -9,7 +9,7 @@ import { ErrorPage } from "./pages/ErrorPage";
 //funziona anche la ricerca, per ritornare allo stato precedente senza ricaricare la pagina (dato che redux non è persistente)
 //basta premere invio quando la stringa è vuota all'interno della search
 //ho reso il redux persistente. In questo modo la lista dei preferiti non si cancella
-//sono riusctio ad aggiungere anche la coda tramite redux
+//sono riusctio ad aggiungere anche la coda tramite redux. Ho interpretato ma le il secondo extra, ho fatto aggiungi alla coda
 //Se si preme il comando per la traccia successiva funziona in base agli elementi che sono stati aggiunti alla coda
 //il tasto per andare a quella precedente non lo ho fatto funzionare, perché quando passa alla prossia eliminia quella canzone dalla coda
 //il volume funziona. E non ho voluto far funzionare lo shuffle perché preferisco che la coda si mantenga nell'ordine in cui li ho inseriti
